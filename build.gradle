@@ -39,8 +39,8 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
+	compile files('libs/stravav3client-1.0.0.jar')
 	compile('org.springframework.boot:spring-boot-starter-webflux')
 	compile('com.fasterxml.jackson.module:jackson-module-kotlin')
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
