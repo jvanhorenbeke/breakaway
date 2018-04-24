@@ -44,3 +44,8 @@ out
 
 ### swagger ###
 /generated/
+
+### kotlin ###
+/build/
+
+
