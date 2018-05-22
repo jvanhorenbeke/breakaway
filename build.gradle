@@ -46,6 +46,7 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compile("org.jetbrains.kotlin:kotlin-reflect")
 	compile('com.github.jkcclemens:khttp:-SNAPSHOT')
+	compile('com.google.code.gson:gson:2.8.4')
 
 	compile("org.apache.httpcomponents:httpclient")
 	compile("org.apache.httpcomponents:fluent-hc")

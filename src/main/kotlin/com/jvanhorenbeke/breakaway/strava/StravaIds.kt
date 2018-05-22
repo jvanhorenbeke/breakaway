@@ -1,0 +1,14 @@
+package com.jvanhorenbeke.breakaway.strava
+
+
+enum class StravaIds(val id: Long) {
+    HAWK_HILL_SEGMENT(229781),
+    CAMINO_ALTO_SEGMENT(4783121),
+    POLO_FIELD_SEGMENT(432873),
+    FOUR_CORNERS_SEGMENT(1173191),
+    PANTOLL_SEGMENT(6366843),
+    MT_TAM_SEGMENT(939162),
+    STINSON_PANTOLL_SEGMENT(626859),
+
+    RADIUS_CLUB(197635)
+}
