@@ -1,4 +1,4 @@
-package com.jvanhorenbeke.breakaway
+package com.velorecord.breakaway
 
 import org.junit.Test
 import org.junit.runner.RunWith

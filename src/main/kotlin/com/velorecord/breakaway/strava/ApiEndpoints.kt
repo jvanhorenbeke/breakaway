@@ -1,4 +1,4 @@
-package com.jvanhorenbeke.breakaway.strava
+package com.velorecord.breakaway.strava
 
 object ApiEndpoints {
 
