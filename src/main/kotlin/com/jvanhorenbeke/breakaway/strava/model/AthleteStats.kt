@@ -1,17 +1,17 @@
-package com.jvanhorenbeke.breakaway.views
+package com.jvanhorenbeke.breakaway.strava.model
 
 data class AthleteStats(
-    val biggest_ride_distance: Double,
-    val biggest_climb_elevation_gain: Double,
-    val recent_ride_totals: RecentRideTotals,
-    val recent_run_totals: RecentRunTotals,
-    val recent_swim_totals: RecentSwimTotals,
-    val ytd_ride_totals: YtdRideTotals,
-    val ytd_run_totals: YtdRunTotals,
-    val ytd_swim_totals: YtdSwimTotals,
-    val all_ride_totals: AllRideTotals,
-    val all_run_totals: AllRunTotals,
-    val all_swim_totals: AllSwimTotals
+        val biggest_ride_distance: Double,
+        val biggest_climb_elevation_gain: Double,
+        val recent_ride_totals: RecentRideTotals,
+        val recent_run_totals: RecentRunTotals,
+        val recent_swim_totals: RecentSwimTotals,
+        val ytd_ride_totals: YtdRideTotals,
+        val ytd_run_totals: YtdRunTotals,
+        val ytd_swim_totals: YtdSwimTotals,
+        val all_ride_totals: AllRideTotals,
+        val all_run_totals: AllRunTotals,
+        val all_swim_totals: AllSwimTotals
 ) {
     data class AllRunTotals(
         val count: Int,

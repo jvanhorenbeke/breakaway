@@ -4,18 +4,40 @@ import com.google.gson.Gson
 import com.jvanhorenbeke.breakaway.strava.ApiEndpoints
 import com.jvanhorenbeke.breakaway.strava.Client
 import com.jvanhorenbeke.breakaway.strava.StravaIds
-import com.jvanhorenbeke.breakaway.views.AthleteStats
+import com.jvanhorenbeke.breakaway.strava.model.AthleteStats
+import com.jvanhorenbeke.breakaway.strava.model.SegmentLeaderBoard
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-class BreakawayController {
+class BreakawayController(val gson: Gson = Gson()) {
+
+    private fun enrichAthleteInfo(segmentLeaderBoard: SegmentLeaderBoard) : String {
+        val map = HashMap<String, Long>()
+        map["Jelle V."] = 9022454
+        map["Evan P."] = 9757503
+        map["Philip G."] = 3014007
+        map["Tyler W."] = 1000123
+        map["Pablo S."] = 1000123
+        map["Antoine C."] = 1000123
+
+        //create a map of positions based on the segment leaderboard. Try to obtain more data given the Name / AthleteId
+
+        return segmentLeaderBoard.toString()
+    }
 
     @GetMapping("/sprinters/{clubId}/{year}")
-    fun sprinters(@PathVariable("clubId") clubId: String, @PathVariable("year") year: String) =
-            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.POLO_FIELD_SEGMENT.id))
+    fun sprinters(@PathVariable("clubId") clubId: String,
+                  @PathVariable("year") year: String)
+            : String {
+
+        val segmentLeaderBoardStr = Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.POLO_FIELD_SEGMENT.id))
+        val segmentLeaderBoard = gson.fromJson<SegmentLeaderBoard>(segmentLeaderBoardStr, SegmentLeaderBoard::class.java)
+
+        return enrichAthleteInfo(segmentLeaderBoard)
+    }
 
     @GetMapping("/radius/{clubId}/{year}")
     fun radius(@PathVariable("clubId") clubId: String, @PathVariable("year") year: String) =
@@ -30,13 +52,6 @@ class BreakawayController {
 
     @GetMapping("/test")
     fun test() : String {
-
-        val gson = Gson()
-
-        val map = HashMap<String, Long>()
-        map["Jelle V."] = 9022454
-        map["Evan P."] = 9757503
-        map["Philip G."] = 3014007
 
         val athleteStatsStr = Client.execute(ApiEndpoints.athleteStats(9022454))
 

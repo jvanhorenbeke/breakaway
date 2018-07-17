@@ -5,7 +5,8 @@ data class LeaderboardAthlete(
         val rider: String,
         val distance: Int,
         val points: Int,
-        val athleteId: Long
+        val athleteId: Long,
+        val elapsedTime: Long
 )
 {
 }

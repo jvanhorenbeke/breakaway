@@ -8,6 +8,6 @@ object Client {
     fun execute(url: String) : String {
         val builder = URIBuilder(url)
         val uri = builder.build()
-        return Request.Get(uri).setHeader("Authorization", "Bearer ").execute().returnContent().asString()
+        return Request.Get(uri).setHeader("Authorization", "Bearer 780e612f053c09c893c19578dbedfc8da1dddbb9").execute().returnContent().asString()
     }
 }
