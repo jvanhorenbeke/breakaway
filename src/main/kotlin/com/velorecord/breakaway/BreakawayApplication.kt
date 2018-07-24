@@ -1,4 +1,4 @@
-package com.jvanhorenbeke.breakaway
+package com.velorecord.breakaway
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

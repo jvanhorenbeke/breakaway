@@ -1,11 +1,10 @@
-package com.jvanhorenbeke.breakaway
+package com.velorecord.breakaway
 
 import com.google.gson.Gson
-import com.jvanhorenbeke.breakaway.strava.ApiEndpoints
-import com.jvanhorenbeke.breakaway.strava.Client
-import com.jvanhorenbeke.breakaway.strava.StravaIds
-import com.jvanhorenbeke.breakaway.strava.model.AthleteStats
 import com.jvanhorenbeke.breakaway.strava.model.SegmentLeaderBoard
+import com.velorecord.breakaway.strava.ApiEndpoints
+import com.velorecord.breakaway.strava.Client
+import com.velorecord.breakaway.strava.StravaIds
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController

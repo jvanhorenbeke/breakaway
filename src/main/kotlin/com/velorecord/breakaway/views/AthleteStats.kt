@@ -1,4 +1,4 @@
-package com.jvanhorenbeke.breakaway.strava.model
+package com.velorecord.breakaway.views
 
 data class AthleteStats(
         val biggest_ride_distance: Double,

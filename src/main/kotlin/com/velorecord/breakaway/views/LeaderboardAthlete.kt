@@ -1,4 +1,4 @@
-package com.jvanhorenbeke.breakaway.views
+package com.velorecord.breakaway.views
 
 data class LeaderboardAthlete(
         val profilePicture: String = "https://dgalywyr863hv.cloudfront.net/pictures/athletes/9022454/4377256/3/large.jpg",
