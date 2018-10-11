@@ -17,3 +17,8 @@ To create a executable "fat jar":
 Start the app:
 
     ./gradlew bootRun
+
+Set old Java version:
+
+    export JAVA_HOME=`/usr/libexec/java_home -v 1.8
+
