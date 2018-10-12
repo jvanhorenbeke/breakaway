@@ -70,7 +70,7 @@ class BreakawayController(val gson: Gson = Gson()) {
 
     @GetMapping("/polka/{clubId}")
     fun polka(@PathVariable("clubId") clubId: String) =
-            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.PANTOLL_SEGMENT.id))
+            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.STINSON_PANTOLL_SEGMENT.id))
 
     @GetMapping("/rainbow/{clubId}")
     fun rainbow(@PathVariable("clubId") clubId: String) =
