@@ -6,13 +6,10 @@ import com.google.gson.JsonObject
 import com.velorecord.breakaway.strava.ApiEndpoints
 import com.velorecord.breakaway.strava.Client
 import com.velorecord.breakaway.strava.StravaIds
-import com.velorecord.breakaway.views.AthleteStats
-import com.velorecord.breakaway.views.LeaderboardAthlete
+import com.velorecord.breakaway.views.SegmentLeaderboard
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-
 
 @RestController
 class BreakawayController(val gson: Gson = Gson()) {
@@ -24,7 +21,7 @@ class BreakawayController(val gson: Gson = Gson()) {
         yellowMaillot.addProperty("id", "yellowMaillot")
         yellowMaillot.addProperty("name", "gc")
         yellowMaillot.addProperty("jersey", "yellow")
-        yellowMaillot.addProperty("hasGap", false)
+        yellowMaillot.addProperty("hasGap", true)
 
         val radiusMaillot = JsonObject()
         radiusMaillot.addProperty("id", "radiusMaillot")
@@ -42,7 +39,7 @@ class BreakawayController(val gson: Gson = Gson()) {
         polkaMaillot.addProperty("id", "polkaMaillot")
         polkaMaillot.addProperty("name", "polka")
         polkaMaillot.addProperty("jersey", "polkadot")
-        polkaMaillot.addProperty("hasGap", true)
+        polkaMaillot.addProperty("hasGap", false)
 
         val rainbowMaillot = JsonObject()
         rainbowMaillot.addProperty("id", "rainbowMaillot")
@@ -74,47 +71,45 @@ class BreakawayController(val gson: Gson = Gson()) {
 
     @GetMapping("/rainbow")
     fun rainbow(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
+            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.FOUR_CORNERS_SEGMENT.id, ytd = ytd))
+
+    @GetMapping("/camino_alto")
+    fun fourCorners(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
             Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.CAMINO_ALTO_SEGMENT.id, ytd = ytd))
 
     @GetMapping("/gc")
-    fun general(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
-            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.FOUR_CORNERS_SEGMENT.id, ytd = ytd))
+    fun general(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) : String {
 
-    @GetMapping("/test")
-    fun test() : String {
-        val nameToId = HashMap<String, Long>()
-        nameToId["Jelle V."] = 9022454
-        nameToId["Evan P."] = 9757503
-        nameToId["Philip G."] = 3014007
-        nameToId["Tyler W."] = 1000123
-        nameToId["Pablo S."] = 1000123
-        nameToId["Antoine C."] = 1000123
-        nameToId["Peter C."] = 1000123
-        nameToId["Diego B."] = 1000123
+        val rainbowMap = HashMap<String, Pair<Long, Int>>()
+        val listOf = listOf(
+                Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.FOUR_CORNERS_SEGMENT.id, ytd = ytd)),
+                Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.STINSON_PANTOLL_SEGMENT.id, ytd = ytd)),
+                Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.CAMINO_ALTO_SEGMENT.id, ytd = ytd)),
+                Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.HAWK_HILL_SEGMENT.id, ytd = ytd)),
+                Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.POLO_FIELD_SEGMENT.id, ytd = ytd))
+        )
 
-        val idToName = HashMap<Long, String>()
-        idToName[9022454] = "Jelle V."
-        idToName[9757503] = "Evan P."
-        idToName[3014007] = "Philip G."
-        idToName[1000123] = "Tyler W."
-        idToName[1000123] = "Pablo S."
-        idToName[1000123] = "Antoine C."
-        idToName[1000123] = "Peter C."
-        idToName[1000123] = "Diego B."
-
-        val map = nameToId.values.map {
-            val athleteStatsStr = Client.execute(ApiEndpoints.athleteStats(9022454))
-            val athleteStats = gson.fromJson<AthleteStats>(athleteStatsStr, AthleteStats::class.java)
-            LeaderboardAthlete(
-                    rider = idToName[it].orEmpty(),
-                    distance = athleteStats.all_ride_totals.distance,
-                    points = 0,
-                    athleteId = it,
-                    elapsedTime = athleteStats.all_ride_totals.elapsed_time.toLong()
-            )
+        val mergeFun = { x: Pair<Long, Int>, y: Pair<Long, Int> -> Pair(x.first + y.first, x.second + y.second) }
+        listOf.forEach { json ->
+            val leaderboard = gson.fromJson<SegmentLeaderboard>(json, SegmentLeaderboard::class.java)
+            leaderboard.entries.forEach { leaderboardEntry ->
+                rainbowMap.merge(leaderboardEntry.athlete_name, Pair(leaderboardEntry.elapsed_time, 1), mergeFun)
+                Unit
+            }
         }
 
-        return gson.toJson(map)
-    }
+        val entrytoSegmentLeaderboardEntry = { entry: Map.Entry<String, Long> ->
+            SegmentLeaderboard.SegmentLeaderboardEntry(entry.key, entry.value, entry.value, "", "", -1)
+        }
 
+        return gson.toJson(SegmentLeaderboard(
+                -1, -1, "",
+                rainbowMap
+                        .filterValues { (_, numberOfRaces: Int) -> numberOfRaces == listOf.size }
+                        .mapValues { entry -> entry.value.first }
+                        .map { entry -> entrytoSegmentLeaderboardEntry(entry) }
+                        .sortedWith(compareBy({ it.elapsed_time }))
+                        .toTypedArray()
+        ))
+    }
 }

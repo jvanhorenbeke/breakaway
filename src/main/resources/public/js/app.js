@@ -11,11 +11,8 @@ String.prototype.compose = (function (){
 }());
 // --------------- Club Activities ---------------
 var loadClubRankings = function() {
-
     var ytd = getUrlVar('ytd');
     var params = ytd != "" && (ytd == 'true') ? "?ytd=true" : "";
-
-    console.log('params' + params);
 
     $.ajax({url: serverUrl + "/boards"})
      .done(function (data) {
