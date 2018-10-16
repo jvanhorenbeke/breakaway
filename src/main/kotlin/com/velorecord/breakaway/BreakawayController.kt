@@ -10,14 +10,15 @@ import com.velorecord.breakaway.views.AthleteStats
 import com.velorecord.breakaway.views.LeaderboardAthlete
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
 class BreakawayController(val gson: Gson = Gson()) {
 
-    @GetMapping("/boards/{clubId}")
-    fun boards(@PathVariable("clubId") clubId: String) : String {
+    @GetMapping("/boards")
+    fun boards() : String {
 
         val yellowMaillot = JsonObject()
         yellowMaillot.addProperty("id", "yellowMaillot")
@@ -59,26 +60,25 @@ class BreakawayController(val gson: Gson = Gson()) {
         return gson.toJson(jsonArray)
     }
 
-//    @GetMapping("/sprinters/{clubId}/{year}")
-    @GetMapping("/sprinters/{clubId}")
-    fun sprinters(@PathVariable("clubId") clubId: String) =
-        Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.POLO_FIELD_SEGMENT.id))
+    @GetMapping("/sprinters")
+    fun sprinters(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
+        Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.POLO_FIELD_SEGMENT.id, ytd = ytd))
 
-    @GetMapping("/radius/{clubId}")
-    fun radius(@PathVariable("clubId") clubId: String) =
-            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.HAWK_HILL_SEGMENT.id))
+    @GetMapping("/radius")
+    fun radius(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
+            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.HAWK_HILL_SEGMENT.id, ytd = ytd))
 
-    @GetMapping("/polka/{clubId}")
-    fun polka(@PathVariable("clubId") clubId: String) =
-            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.STINSON_PANTOLL_SEGMENT.id))
+    @GetMapping("/polka")
+    fun polka(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
+            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.STINSON_PANTOLL_SEGMENT.id, ytd = ytd))
 
-    @GetMapping("/rainbow/{clubId}")
-    fun rainbow(@PathVariable("clubId") clubId: String) =
-            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.CAMINO_ALTO_SEGMENT.id))
+    @GetMapping("/rainbow")
+    fun rainbow(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
+            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.CAMINO_ALTO_SEGMENT.id, ytd = ytd))
 
-    @GetMapping("/gc/{clubId}")
-    fun general(@PathVariable("clubId") clubId: String) =
-            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.FOUR_CORNERS_SEGMENT.id))
+    @GetMapping("/gc")
+    fun general(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
+            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.FOUR_CORNERS_SEGMENT.id, ytd = ytd))
 
     @GetMapping("/test")
     fun test() : String {

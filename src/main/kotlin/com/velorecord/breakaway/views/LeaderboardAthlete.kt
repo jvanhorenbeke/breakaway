@@ -8,5 +8,3 @@ data class LeaderboardAthlete(
         val athleteId: Long,
         val elapsedTime: Long
 )
-{
-}

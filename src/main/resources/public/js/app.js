@@ -1,5 +1,4 @@
 var serverUrl = '';
-const defaultClubId = '197635'; //Default clubId is Radius-Cycling team
 
 //Compose template string
 String.prototype.compose = (function (){
@@ -13,14 +12,12 @@ String.prototype.compose = (function (){
 // --------------- Club Activities ---------------
 var loadClubRankings = function() {
 
-    var params = "/";
-    var clubId = getUrlVar('clubid');
-    params += clubId != "" ? clubId : defaultClubId;
+    var ytd = getUrlVar('ytd');
+    var params = ytd != "" && (ytd == 'true') ? "?ytd=true" : "";
 
-    var year = getUrlVar('year');
-    params += year != "" ? "/" + year : "";
+    console.log('params' + params);
 
-    $.ajax({url: serverUrl + "/boards" + params})
+    $.ajax({url: serverUrl + "/boards"})
      .done(function (data) {
        $.each(JSON.parse(data), function(i, board) {
             loadSegmentLeaderBoard(board, params);
@@ -40,24 +37,6 @@ var loadSegmentLeaderBoard = function(leaderboard, params) {
       console.log('unable to retrieve leaderboard: ' + leaderboard.name);
    });
 };
-// ------------------ Util functions ---------------------
-var metersToMiles = function(meters) {
-    return Math.round(meters/1000*0.62137);
-}
-
-var metersToFeet = function(meters) {
-    return Math.round(meters*3.28084);
-}
-
-var speedToMiles = function(metersPerSeconds) {
-    metersPerHour = metersPerSeconds * 3600;
-    return metersToMiles(metersPerHour);
-}
-
-var getUrlVar = function(key) {
-	var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
-	return result && unescape(result[1]) || "";
-}
 // ------------------ Bind data to HTML elements ---------------------
 var generateSegmentRankings = function(standings, leaderboard) {
     var tbody = $('#' + leaderboard.id).children('tbody');
@@ -93,17 +72,25 @@ var generateSegmentRankings = function(standings, leaderboard) {
   });
 }
 
-var loadClubHeader = function() {
-    var clubId = getUrlVar('clubid');
-    var clubHeader = '<h1><img src="https://dgalywyr863hv.cloudfront.net/pictures/clubs/197635/4257457/2/medium.jpg" /> Radius Cycling</h1>';
-    if (clubId != "" && clubId==2016) {
-        clubHeader = '<h1><img src="https://dgalywyr863hv.cloudfront.net/pictures/clubs/2016/1229525/1/medium.jpg" /> M2 Revolution</h1>';
-    }
-    $('#clubHeader').append(clubHeader);
+// ------------------ Util functions ---------------------
+var metersToMiles = function(meters) {
+    return Math.round(meters/1000*0.62137);
 }
 
+var metersToFeet = function(meters) {
+    return Math.round(meters*3.28084);
+}
+
+var speedToMiles = function(metersPerSeconds) {
+    metersPerHour = metersPerSeconds * 3600;
+    return metersToMiles(metersPerHour);
+}
+
+var getUrlVar = function(key) {
+	var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+	return result && unescape(result[1]) || "";
+}
 // -------------------------- document ready -----------------------------------
 $(document).ready(function() {
-    loadClubHeader();
     loadClubRankings();
 });
