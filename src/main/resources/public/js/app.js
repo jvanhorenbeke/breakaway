@@ -14,7 +14,10 @@ var loadClubRankings = function() {
     var ytd = getUrlVar('ytd');
     var params = ytd != "" && (ytd == 'true') ? "?ytd=true" : "";
 
-    $.ajax({url: serverUrl + "/boards"})
+    var mainView = getUrlVar('main_view') == "" || (getUrlVar('main_view') != 'false')
+    var mainViewParam = mainView ? "" : "?main_view=false";
+
+    $.ajax({url: serverUrl + "/boards" + mainViewParam})
      .done(function (data) {
        $.each(JSON.parse(data), function(i, board) {
             loadSegmentLeaderBoard(board, params);
@@ -36,8 +39,8 @@ var loadSegmentLeaderBoard = function(leaderboard, params) {
 };
 // ------------------ Bind data to HTML elements ---------------------
 var generateSegmentRankings = function(standings, leaderboard) {
-    var tbody = $('#' + leaderboard.id).children('tbody');
-    var table = tbody.length ? tbody : $('#' + leaderboard.id);
+    var table = $('#' + leaderboard.id).children('table');
+
     var jerseyImg = '<img src="./res/jersey/' + leaderboard.jersey + '.png" class="jersey" />';
     var row = '<tr>'+
       '<th scope="row">{{id}}</th>'+
@@ -46,7 +49,7 @@ var generateSegmentRankings = function(standings, leaderboard) {
       (leaderboard.hasGap ? '<td>{{gap}}</td>' : '') +
     '</tr>';
 
-  if (standings.entries.length < 1) {
+    if (standings.entries.length < 1) {
       table.append(row.compose({
           'id': '--',
           'name': '<i>No results</i>',
@@ -54,19 +57,21 @@ var generateSegmentRankings = function(standings, leaderboard) {
           'gap': '--',
           'activityId': '#'
       }));
-  }
+    }
 
-  var gap = 0;
-  $.each(standings.entries, function(i, rider) {
-    table.append(row.compose({
-        'id': i+1,
-        'name': i == 0 ? jerseyImg + rider.athlete_name : rider.athlete_name,
-        'time': moment.utc(rider.elapsed_time*1000).format('mm:ss'),
-        'gap': i == 0 ? '--' : moment.utc(1000*(rider.elapsed_time - gap)).format('mm:ss'),
-        'activityId': rider.activity_id
-    }));
-    gap = i == 0 ? rider.elapsed_time : gap;
-  });
+    var gap = 0;
+    $.each(standings.entries, function(i, rider) {
+        table.append(row.compose({
+            'id': i+1,
+            'name': i == 0 ? jerseyImg + rider.athlete_name : rider.athlete_name,
+            'time': moment.utc(rider.elapsed_time*1000).format('mm:ss'),
+            'gap': i == 0 ? '--' : moment.utc(1000*(rider.elapsed_time - gap)).format('mm:ss'),
+            'activityId': rider.activity_id
+        }));
+        gap = i == 0 ? rider.elapsed_time : gap;
+    });
+
+    $('#' + leaderboard.id).show()
 }
 
 // ------------------ Util functions ---------------------

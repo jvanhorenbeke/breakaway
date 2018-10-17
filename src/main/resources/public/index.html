@@ -18,10 +18,10 @@
         </div>
         <div class="float-left">
             <ul class="nav nav-pills">
-                <!--<li role="presentation" class="disabled"><a href="#">Dashboard</a></li>-->
-                <!--<li role="presentation"><a href="./rules">Rules</a></li>-->
                 <li role="presentation"><a href="./index.html">Standings</a></li>
+                <li role="presentation"><a href="./index.html?main_view=false">Extended Standings</a></li>
                 <li role="presentation"><a href="./index.html?ytd=true">YTD Standings</a></li>
+                <li role="presentation" class="disabled"><a href="#">Stats</a></li>
             </ul>
         </div>
         <div class="float-right">
@@ -30,10 +30,11 @@
     </div>
 
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3">
+
+        <div class="row">
+        <div class="col-md-3" id="yellowMaillot">
           <h2>General classification</h2>
-          <table class="table table-striped" id="yellowMaillot">
+          <table class="table table-striped">
             <thead>
               <tr>
                 <th>Rank</th>
@@ -45,9 +46,9 @@
             <tbody></tbody>
           </table>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" id="radiusMaillot">
           <h2>Radius Jersey <small>Hawk Hill Time</small></h2>
-          <table class="table table-striped" id="radiusMaillot">
+          <table class="table table-striped">
             <thead>
             <tr>
               <th>Rank</th>
@@ -59,9 +60,9 @@
             <tbody></tbody>
           </table>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3" id="polkaMaillot">
           <h2>Climber Jersey <small>Pantoll</small></h2>
-          <table class="table table-striped" id="polkaMaillot">
+          <table class="table table-striped">
             <thead>
               <tr>
                 <th>Rank</th>
@@ -72,9 +73,9 @@
             <tbody></tbody>
           </table>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3" id="greenMaillot">
           <h2>Sprinter Jersey <small>1K Lap</small></h2>
-          <table class="table table-striped" id="greenMaillot">
+          <table class="table table-striped">
             <thead>
               <tr>
                 <th>Rank</th>
@@ -85,20 +86,63 @@
             <tbody></tbody>
           </table>
         </div>
-        <div class="col-md-2">
-          <h2>Rainboy Jersey <small>Arsicault</small></h2>
-          <table class="table table-striped" id="rainbowMaillot">
-            <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Rider</th>
-              <th>Time</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
         </div>
-      </div>
+
+        <div class="row">
+            <div class="col-md-3" id="rainbowMaillot">
+                <h2>Rainbow Jersey <small>Arsicault</small></h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Rider</th>
+                        <th>Time</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="col-md-3" id="combativeMaillot">
+                <h2>Combative Jersey <small>Presidio Sprint</small></h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Rider</th>
+                        <th>Time</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="col-md-3" id="unkownMaillot">
+                <h2>Camino Alto</h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Rider</th>
+                        <th>Time</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="col-md-3" id="noMaillot">
+                <h2>No Jersey <small>nothing</small></h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Rider</th>
+                        <th>Time</th>
+                        <th>Gap</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <!-- Javascript -->
     <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script> -->

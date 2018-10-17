@@ -1,12 +1,12 @@
 package com.velorecord.breakaway
 
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.velorecord.breakaway.strava.ApiEndpoints
 import com.velorecord.breakaway.strava.Client
 import com.velorecord.breakaway.strava.StravaIds
 import com.velorecord.breakaway.views.SegmentLeaderboard
+import com.velorecord.breakaway.views.StatsBoardDefinition
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -15,46 +15,22 @@ import org.springframework.web.bind.annotation.RestController
 class BreakawayController(val gson: Gson = Gson()) {
 
     @GetMapping("/boards")
-    fun boards() : String {
+    fun boards(@RequestParam(value="main_view", required=false, defaultValue="true") isMainView: Boolean) : String {
 
-        val yellowMaillot = JsonObject()
-        yellowMaillot.addProperty("id", "yellowMaillot")
-        yellowMaillot.addProperty("name", "gc")
-        yellowMaillot.addProperty("jersey", "yellow")
-        yellowMaillot.addProperty("hasGap", true)
+        val mainView = arrayOf(
+                StatsBoardDefinition("yellowMaillot", "gc", "yellow", true),
+                StatsBoardDefinition("radiusMaillot", "radius", "blue", true),
+                StatsBoardDefinition("greenMaillot", "sprinters", "green"),
+                StatsBoardDefinition("polkaMaillot", "polka", "polkadot")
+        )
 
-        val radiusMaillot = JsonObject()
-        radiusMaillot.addProperty("id", "radiusMaillot")
-        radiusMaillot.addProperty("name", "radius")
-        radiusMaillot.addProperty("jersey", "blue")
-        radiusMaillot.addProperty("hasGap", true)
+        val extendedView = arrayOf(
+                StatsBoardDefinition("combativeMaillot", "combative", "combative"),
+                StatsBoardDefinition("unkownMaillot", "caminoalto", "unknown"),
+                StatsBoardDefinition("rainbowMaillot", "rainbow", "rainbow")
+        )
 
-        val greenMaillot = JsonObject()
-        greenMaillot.addProperty("id", "greenMaillot")
-        greenMaillot.addProperty("name", "sprinters")
-        greenMaillot.addProperty("jersey", "green")
-        greenMaillot.addProperty("hasGap", false)
-
-        val polkaMaillot = JsonObject()
-        polkaMaillot.addProperty("id", "polkaMaillot")
-        polkaMaillot.addProperty("name", "polka")
-        polkaMaillot.addProperty("jersey", "polkadot")
-        polkaMaillot.addProperty("hasGap", false)
-
-        val rainbowMaillot = JsonObject()
-        rainbowMaillot.addProperty("id", "rainbowMaillot")
-        rainbowMaillot.addProperty("name", "rainbow")
-        rainbowMaillot.addProperty("jersey", "rainbow")
-        rainbowMaillot.addProperty("hasGap", false)
-
-        val jsonArray = JsonArray()
-        jsonArray.add(radiusMaillot)
-        jsonArray.add(greenMaillot)
-        jsonArray.add(polkaMaillot)
-        jsonArray.add(rainbowMaillot)
-        jsonArray.add(yellowMaillot)
-
-        return gson.toJson(jsonArray)
+        return gson.toJson(if (isMainView) mainView else extendedView)
     }
 
     @GetMapping("/sprinters")
@@ -73,8 +49,12 @@ class BreakawayController(val gson: Gson = Gson()) {
     fun rainbow(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
             Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.FOUR_CORNERS_SEGMENT.id, ytd = ytd))
 
-    @GetMapping("/camino_alto")
-    fun fourCorners(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
+    @GetMapping("/combative")
+    fun combative(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
+            Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.EXTENDED_PRESIDIO_SPRINT.id, ytd = ytd))
+
+    @GetMapping("/caminoalto")
+    fun caminoAlto(@RequestParam(value="ytd", required=false, defaultValue="false") ytd: Boolean) =
             Client.execute(ApiEndpoints.segmentLeaderboard(StravaIds.CAMINO_ALTO_SEGMENT.id, ytd = ytd))
 
     @GetMapping("/gc")
@@ -105,6 +85,7 @@ class BreakawayController(val gson: Gson = Gson()) {
         return gson.toJson(SegmentLeaderboard(
                 -1, -1, "",
                 rainbowMap
+                        .filterKeys { key -> !key.contentEquals("Strava A.") }
                         .filterValues { (_, numberOfRaces: Int) -> numberOfRaces == listOf.size }
                         .mapValues { entry -> entry.value.first }
                         .map { entry -> entrytoSegmentLeaderboardEntry(entry) }

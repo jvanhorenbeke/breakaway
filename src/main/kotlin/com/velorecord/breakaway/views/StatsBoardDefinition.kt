@@ -1,4 +1,8 @@
 package com.velorecord.breakaway.views
 
-class StatsBoardDefinition {
-}
+data class StatsBoardDefinition(
+        val id: String,
+        val name: String,
+        val jersey: String,
+        val hasGap: Boolean = false
+)

@@ -86,7 +86,12 @@ h2 {
     color: white;
 }
 
-/*override bootstrap */
+/* override bootstrap */
+
+.col-md-3 {
+    display: none;
+}
+
 h2 small {
     color: #e6e6e6;
     padding-left: 10px;
@@ -140,22 +145,16 @@ h2 small {
     background-color: #3a8ecb;
 }
 
-/*Radius Rules page*/
-.rules-bg {
-    background-color: black;
-    opacity: 0.3;
-    border-radius: 10px;
-    height: 650px;
-    margin: 30px auto;
+#rainbowMaillot thead {
+    background-image: url("../res/rainbow_bg.png");
+    background-attachment: fixed;
 }
 
-.rules {
-    margin: -700px auto;
-    padding: 50px;
-    color: white;
-    z-index: 10;
+#combativeMaillot thead {
+    background-color: #ff0d11;
 }
 
-.rules a, .rules a:hover, .rules a:visited {
-    color: white;
+#unkownMaillot thead {
+    background-color: #d4d4d4;
 }
+
